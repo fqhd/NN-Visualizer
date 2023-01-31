@@ -1,10 +1,10 @@
-const GRID_WIDTH = 10;
 let is_mouse_down = false;
 
 class Renderer {
 	constructor() {
 		this.gl = this.initWebGL();
 		this.grid = new Grid(this.gl);
+		this.plane = new Plane(this.gl);
 		this.camera = create_camera(30, 90, 8/6);
 	}
 
@@ -16,7 +16,7 @@ class Renderer {
 	render(nn) {
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 		this.grid.draw(this.camera);
-		// Draw Neural Network Plane
+		this.plane.draw(this.camera);
 	}
 
 	initWebGL() {

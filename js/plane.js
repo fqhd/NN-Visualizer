@@ -1,6 +1,6 @@
-const GRID_WIDTH = 10;
+const RESOLUTION = 10;
 
-class Grid {
+class Plane {
 	constructor(gl) {
 		this.gl = gl;
 		this.createVBO();
@@ -10,12 +10,12 @@ class Grid {
 	createVBO() {
 		const vertices = [];
 
-		vertices.push(-1, 0, -1);
-		vertices.push(-1, 0, 1);
-		vertices.push(1, 0, 1);
-		vertices.push(-1, 0, -1);
-		vertices.push(1, 0, 1);
-		vertices.push(1, 0, -1);
+		vertices.push(-1, 1, -1);
+		vertices.push(-1, 1, 1);
+		vertices.push(1, 1, 1);
+		vertices.push(-1, 1, -1);
+		vertices.push(1, 1, 1);
+		vertices.push(1, 1, -1);
 
 		this.vbo = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
@@ -36,7 +36,7 @@ class Grid {
 		
 		const fs = `
 			void main(){
-				gl_FragColor = vec4(1.0);
+				gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 			}
 		`;
 
