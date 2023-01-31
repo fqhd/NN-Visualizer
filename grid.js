@@ -7,13 +7,13 @@ class Grid {
 
 	createVBO() {
 		const vertices = [];
-    
-        vertices.push(-1, 0, -1);
-        vertices.push(-1, 0, 1);
-        vertices.push(1, 0, 1);
-        vertices.push(-1, 0, -1);
-        vertices.push(1, 0, 1);
-        vertices.push(1, 0, -1);
+
+		vertices.push(-1, 0, -1);
+		vertices.push(-1, 0, 1);
+		vertices.push(1, 0, 1);
+		vertices.push(-1, 0, -1);
+		vertices.push(1, 0, 1);
+		vertices.push(1, 0, -1);
 
 		this.vbo = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
