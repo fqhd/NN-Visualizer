@@ -24,8 +24,11 @@ class Grid {
 		const vs = `
 			attribute vec3 aPosition;
 
+			uniform mat4 projection;
+			uniform mat4 view;
+
 			void main(){
-				gl_Position = vec4(aPosition, 1.0);
+				gl_Position = projection * view * vec4(aPosition, 1.0);
 			}
 		`;
 		
@@ -38,8 +41,12 @@ class Grid {
 		this.shader = new Shader(this.gl, vs, fs);
 	}
 
-	draw() {
+	draw(cam) {
 		this.shader.bind();
+		const projMatLoc = this.gl.getUniformLocation(this.shader.program, 'projection');
+		this.gl.uniformMatrix4fv(projMatLoc, false, cam.projection);
+		const viewMatLoc = this.gl.getUniformLocation(this.shader.program, 'view');
+		this.gl.uniformMatrix4fv(viewMatLoc, false, cam.view);
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
 		const attribLoc = this.gl.getAttribLocation(this.shader.program, 'aPosition');
 		this.gl.vertexAttribPointer(attribLoc, 3, this.gl.FLOAT, false, 0, 0);
