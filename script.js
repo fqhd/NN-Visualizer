@@ -1,7 +1,15 @@
 let gl;
 
-function init() {
+const GRID_WIDTH = 10;
+
+function run() {
     initWebGL();
+
+    // Create Grid VAO
+
+    // Create Plane VAO
+
+    render();
 }
 
 function initWebGL() {
@@ -11,6 +19,7 @@ function initWebGL() {
 
 function render() {
 
+    requestAnimationFrame(render);
 }
 
 window.onload = () => {
