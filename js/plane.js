@@ -7,26 +7,13 @@ class Plane {
 		this.createShader();
 		this.nn = new NeuralNetwork(2, 4, 1);
 		console.log(this.nn);
-		const training_data = [
+		this.training_data = [
 			[0, 0],
 			[0, 1],
 			[1, 0],
 			[1, 1]
 		];
 
-		for(let i = 0; i < 100000; i++) {
-			const example = training_data[Math.floor(Math.random() * 4)];
-			let output = 0;
-			if(example[0] + example[1] == 1){
-				output = 1;
-			}
-			this.nn.train(example, [output]);
-		}
-
-		console.log(this.nn.predict([0, 0]));
-		console.log(this.nn.predict([1, 0]));
-		console.log(this.nn.predict([0, 1]));
-		console.log(this.nn.predict([1, 1]));
 	}
 
 	createVBO() {
@@ -109,6 +96,15 @@ class Plane {
 
 	draw(cam) {
 		this.shader.bind();
+
+		for(let i = 0; i < 100; i++){
+			const example = this.training_data[Math.floor(Math.random() * 4)];
+			let output = 0;
+			if(example[0] + example[1] == 1){
+				output = 1;
+			}
+			this.nn.train(example, [output]);
+		}
 
 		// Upload neural network
 		const data = [];
