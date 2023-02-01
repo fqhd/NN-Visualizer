@@ -21,7 +21,7 @@ class Renderer {
 
 	initWebGL() {
 		const canvas = document.getElementById('Display');
-		const gl = canvas.getContext('webgl');
+		const gl = canvas.getContext('webgl2');
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.enable(gl.DEPTH_TEST);
 		gl.depthFunc(gl.LEQUAL);
@@ -44,7 +44,7 @@ class Renderer {
 	}
 	
 	on_mouse_wheel(event){
-		this.camera.target_distance += event.deltaY * 0.02;
+		this.camera.target_distance += event.deltaY * 0.002;
 	
 		// Clamping
 		if(this.camera.target_distance < 1.4) this.camera.target_distance = 1.4;
