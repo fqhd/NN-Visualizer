@@ -1,4 +1,4 @@
-const RESOLUTION = 10;
+const RESOLUTION = 100;
 
 class Plane {
 	constructor(gl) {
@@ -32,12 +32,19 @@ class Plane {
 	createVBO() {
 		const vertices = [];
 
-		vertices.push(-1, -1);
-		vertices.push(-1, 1);
-		vertices.push(1, 1);
-		vertices.push(-1, -1);
-		vertices.push(1, 1);
-		vertices.push(1, -1);
+		const w = 1/(RESOLUTION/2); // Cell Width
+		for(let i = 0; i < RESOLUTION; i++){
+			for(let j = 0; j < RESOLUTION; j++){
+				const x = j/RESOLUTION * 2 - 1;
+				const y = i/RESOLUTION * 2 - 1;
+				vertices.push(x, y);
+				vertices.push(x, y+w);
+				vertices.push(x+w, y+w);
+				vertices.push(x, y);
+				vertices.push(x+w, y+w);
+				vertices.push(x+w, y);
+			}
+		}
 
 		this.vbo = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
@@ -55,6 +62,7 @@ class Plane {
 			uniform vec4 bh;
 			uniform vec4 wo;
 			uniform float bo;
+			varying highp float height;
 
 			float sigmoid(float x) {
 				return 1.0 / (1.0 + exp(-x));
@@ -74,14 +82,25 @@ class Plane {
 				x = wh * x + bh;
 				x = activate(x);
 				float y = sigmoid(dot(wo, x) + bo);
+				height = y;
 				
 				gl_Position = projection * view * vec4(aPosition.x, y, aPosition.y, 1.0);
 			}
 		`;
 		
 		const fs = `
+			varying highp float height;
+
+			highp vec3 hsv2rgb(highp vec3 c)
+			{
+				highp vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+				highp vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+				return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+			}
+
 			void main(){
-				gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+
+				gl_FragColor = vec4(hsv2rgb(vec3(1.0 - (height * 0.7 + 0.3), 0.8, 0.9)), 1.0);
 			}
 		`;
 
@@ -119,6 +138,6 @@ class Plane {
 		const attribLoc = this.gl.getAttribLocation(this.shader.program, 'aPosition');
 		this.gl.vertexAttribPointer(attribLoc, 2, this.gl.FLOAT, false, 0, 0);
 		this.gl.enableVertexAttribArray(attribLoc);
-		this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+		this.gl.drawArrays(this.gl.TRIANGLES, 0, RESOLUTION*RESOLUTION*6);
 	}
 }
